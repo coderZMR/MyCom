@@ -1,4 +1,5 @@
 #include "data.h"
+#include <QString>
 
 using namespace std;
 
@@ -40,16 +41,15 @@ void Data::init()
 
 void Data::analyze(QByteArray &data)
 {
-    this->getData = data;   // 对接收到的完整数据流进行格式转换并存储
-    QString sigQue;         // 标记位采集变量
-    QString figQue;         // 数据位采集变量
-    sigQue.clear();         // 标记位采集变量初始化
-    figQue.clear();         // 数据位采集变量初始化
-    for (int i = 0; i < getData.size(); ++i) {      // 遍历已存储的完整数据流
-        if ('a' <= getData.at(i) && getData.at(i) <= 'z')   // 判断是否为标记位
+    this->getData = data;
+    QString sigQue;
+    QString figQue;
+    sigQue.clear();
+    figQue.clear();
+    for (int i = 0; i < getData.size(); ++i) {
+        if ('a' <= getData.at(i) && getData.at(i) <= 'z')
         {
-            if (!figQue.isEmpty()) {    // 判断是否已经接收到数据位
-                // 数据分类提取解析存储
+            if (!figQue.isEmpty()) {
                 if (sigQue == "acx") this->acX = figQue.toFloat();
                 if (sigQue == "acy") this->acY = figQue.toFloat();
                 if (sigQue == "acz") this->acZ = figQue.toFloat();
@@ -72,10 +72,10 @@ void Data::analyze(QByteArray &data)
                 figQue.clear();
                 sigQue.clear();
             }
-            if (getData.at(i) != 'd') sigQue.append(getData.at(i)); // 对数据截止协议标记格式进行特判，当接收到的标记位非数据截止协议标记格式则对标记位进行存储
+            if (getData.at(i) != 'd') sigQue.append(getData.at(i));
         }
         else {
-            figQue.append(getData.at(i));   // 对数据位进行存储
+            figQue.append(getData.at(i));
         }
     }
 }
@@ -190,15 +190,15 @@ float Data::getlts() {
 
 
 void Data::test() {
-    setacX(0);
-    setacY(0);
-    setacZ(0);
-    setanX(0);
-    setanY(0);
-    setanZ(0);
-    setavX(0);
-    setavY(0);
-    setavZ(0);
+    setacX(qrand() % 100);
+    setacY(qrand() % 100);
+    setacZ(qrand() % 100);
+    setanX(qrand() % 100);
+    setanY(qrand() % 100);
+    setanZ(qrand() % 100);
+    setavX(qrand() % 100);
+    setavY(qrand() % 100);
+    setavZ(qrand() % 100);
     setgunValue(qrand() % 100);
-    settemperatureValue(15);
+    settemperatureValue(qrand() % 100);
 }

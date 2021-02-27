@@ -5,6 +5,9 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += 3dcore 3drenderer 3dinput 3dquick qml quick
+
+OTHER_FILES += *.qml
 
 CONFIG   += c++11
 
@@ -20,7 +23,8 @@ SOURCES += main.cpp\
     qextserialport.cpp \
     qextserialbase.cpp \
     visualdescribe.cpp \
-    data.cpp
+    data.cpp \
+    window.cpp
 
 HEADERS  += mainwindow.h \
     win_qextserialport.h \
@@ -28,15 +32,22 @@ HEADERS  += mainwindow.h \
     qextserialbase.h \
     visualdescribe.h \
     visualdescribe.h \
+    window.h \
     data.h
 
-FORMS    += \
-    visualdescribe.ui \
-    mainwindow.ui
+FORMS    += mainwindow.ui \
+    visualdescribe.ui
 
 DEFINES += QT_DLL QWT_DLL
+#LIBS += -L"D:\Qt5.5\5.5\mingw492_32\lib" -lqwtd #Debug
 LIBS += -L"D:\Qt5.5\5.5\mingw492_32\lib" -lqwt #Release
 INCLUDEPATH += D:\Qt5.5\5.5\mingw492_32\include\QWT
+#LIBS += -L"D:\UI_Design\5.1.1\mingw48_32\lib" -lqwtd
+#LIBS += -L"D:\UI_Design\5.1.1\mingw48_32\lib" -lqwt
+#INCLUDEPATH += D:\UI_Design\5.1.1\mingw48_32\include\Qwt
 
 RESOURCES += \
     res.qrc
+
+DISTFILES += \
+    main.qml

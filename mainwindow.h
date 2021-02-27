@@ -5,13 +5,18 @@
 #include "win_qextserialport.h"
 #include "visualdescribe.h"
 #include "data.h"
+#include <QGraphicsDropShadowEffect>
+#include <QPalette>
 #include <QTimer>
-#include "ui_mainwindow.h"
-#include <QDesktopWidget>
-#include <qwt_round_scale_draw.h>
-#include <qwt_dial_needle.h>
-#include "qpoint.h"
-
+// 3D
+#include <window.h>
+#include <Qt3DRenderer/qrenderaspect.h>
+#include <Qt3DInput/QInputAspect>
+#include <Qt3DQuick/QQmlAspectEngine>
+#include <QGuiApplication>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <data.h>
 //#include <QTimer> // 使用Polling模式（查询方式）
 
 namespace Ui {

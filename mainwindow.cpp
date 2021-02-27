@@ -1,5 +1,9 @@
 #include "mainwindow.h"
-
+#include "ui_mainwindow.h"
+#include <QDesktopWidget>
+#include <qwt_round_scale_draw.h>
+#include <qwt_dial_needle.h>
+#include "qpoint.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -7,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("MyCom Window");
+    this->setWindowTitle("上位机端");
     QPalette bgpal = palette();
     bgpal.setColor (QPalette::Background, QColor (192,192,192));
     this->setPalette (bgpal);
@@ -63,7 +67,6 @@ MainWindow::MainWindow(QWidget *parent) :
     updateThermoTimer->setInterval(50);
     connect( updateThermoTimer, SIGNAL( timeout() ), this, SLOT( changeHigh() ) );
 
-
     temp.clear();
     allData.clear();
 }
@@ -98,8 +101,6 @@ void MainWindow::updateData() {
 
 void MainWindow::changeSpeed() {
     ui->Dial_io->setValue(Data::getInstance()->getgunValue());
-    // Data
-    //ui->textBrowser->insertPlainText(QString("acx0") + QString("acy0") + QString("acz0") + QString("avx0") + QString("avy0") + QString("avz0") + QString("agx0") + QString("agy0") + QString("agz0") + QString("tem15") + QString("oi") + QString::number(Data::getInstance()->getgunValue()) + QString("ltf0") + QString("lts0") + QString("d") + QString("\n"));
 }
 
 void MainWindow::changeHigh() {
@@ -108,16 +109,21 @@ void MainWindow::changeHigh() {
 
 void MainWindow::readMyCom() //读串口函数
 {
-    temp = myCom->readAll();    // 读取串口缓冲区的所有数据给临时变量
-    if (!temp.isEmpty())    // 判断是否已从串口读取到数据
+    //使用myCom->bytesAvailable()函数可以判断串口缓冲区中的数据量
+    //读取串口缓冲区的所有数据给临时变量temp
+    temp = myCom->readAll();
+    //将串口的数据显示在窗口的文本浏览器中,调用insertPlainText()函数，是窗口上的文本浏览器中连续输出数据，而不是每次写数据前都清除以前的
+    //QString类中有字符串切割函数split(特征符)可与at(第几个字符串（从0开始）)配合从而读取字符串中特定数据
+    //将QByteArray的对象直接复制给QString对象即可完成（QByteArray到QString转换）转换
+    if (!temp.isEmpty())
     {
-        allData.append(temp);   // 将接收到的数据进行拼接
-        if (allData.contains("d"))  // 判断是否已经接收到一个完整的数据流
+        allData.append(temp);
+        if (allData.contains("d"))
         {
-            QByteArray getPage = allData.split('d').at(0) + 'd';    // 根据“数据截止协议标记格式”截断数据并进行简单数据处理
-            nowData->analyze(getPage);  // 使用“数据分类抽取解析算法”分类提取采集相应的传感器数据
-            ui->textBrowser->insertPlainText(allData.split('d').at(0) + 'd' + '\n' + '\n'); // 将接收到的完整数据流规则显示在窗口的文本浏览器中
-            allData = allData.right(allData.length() - allData.indexOf('d') - 1);   // 对非完整数据流数据进行存储，在下次运行“数据完整性拼接算法”中使用
+            QByteArray getPage = allData.split('d').at(0) + 'd';
+            nowData->analyze(getPage);
+            ui->textBrowser->insertPlainText(allData.split('d').at(0) + 'd' + '\n' + '\n');
+            allData = allData.right(allData.length() - allData.indexOf('d') - 1);
         }
     }
 }
@@ -141,11 +147,11 @@ void MainWindow::on_openMyComBtn_clicked()
     else if(ui->dataBitsComboBox->currentText()==tr("7"))
     myCom->setDataBits(DATA_7);
     //设置奇偶校验
-    if(ui->parityComboBox->currentText()==tr("null"))
+    if(ui->parityComboBox->currentText()==tr("无"))
     myCom->setParity(PAR_NONE);
-    else if(ui->parityComboBox->currentText()==tr("odd"))
+    else if(ui->parityComboBox->currentText()==tr("奇"))
     myCom->setParity(PAR_ODD);
-    else if(ui->parityComboBox->currentText()==tr("even"))
+    else if(ui->parityComboBox->currentText()==tr("偶"))
     myCom->setParity(PAR_EVEN);
     //设置停止位
     if(ui->stopBitsComboBox->currentText()==tr("1"))

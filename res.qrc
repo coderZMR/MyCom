@@ -1,6 +1,12 @@
 <RCC>
     <qresource prefix="/new/prefix1">
+        <file alias="uwrPic">resources/UnderWaterRobot.jpg</file>
         <file alias="lightOn">resources/黄色.png</file>
         <file alias="lightOff">resources/灰色.png</file>
+        <file>robot.obj</file>
+        <file>robot.mtl</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>main.qml</file>
     </qresource>
 </RCC>

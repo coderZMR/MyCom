@@ -1,6 +1,22 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTextCodec>
 #include <QDesktopWidget>
+#include <QPixmap>
+#include <QSplashScreen>
+#include <QTimer>
+#include <QPropertyAnimation>
+
+// 3D
+#include <window.h>
+#include <Qt3DRenderer/qrenderaspect.h>
+#include <Qt3DInput/QInputAspect>
+#include <Qt3DQuick/QQmlAspectEngine>
+#include <QGuiApplication>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <data.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -8,11 +24,37 @@ int main(int argc, char *argv[])
     //使程序可处理中文
 //  QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
 //  QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf_8"));
+    // 数据流加载
+    Data *startData = Data::getInstance();
+
+    // 3D加载
+    Window view;
+    Qt3D::Quick::QQmlAspectEngine engine;
+
+    view.resize(700, 500);
+    engine.aspectEngine()->registerAspect(new Qt3D::QRenderAspect());
+    engine.aspectEngine()->registerAspect(new Qt3D::QInputAspect());
+    engine.aspectEngine()->initialize();
+    QVariantMap data;
+    data.insert(QStringLiteral("surface"), QVariant::fromValue(static_cast<QSurface *>(&view)));
+    data.insert(QStringLiteral("eventSource"), QVariant::fromValue(&view));
+    engine.aspectEngine()->setData(data);
+    engine.qmlEngine()->rootContext()->setContextProperty("_window", &view);
+    engine.qmlEngine()->rootContext()->setContextProperty("_data", startData);
+    engine.setSource(QUrl("qrc:/main.qml"));
 
     // 界面加载
     MainWindow w;
 
-    w.show();
+    QPixmap pixmap(":/new/prefix1/uwrPic");
+    QSplashScreen splash(pixmap);
+
+    // 显示所有窗口
+    splash.show();
+
+    QTimer::singleShot(1500, &splash, SLOT(hide()));
+    QTimer::singleShot(2000, &w, SLOT(show()));
+    QTimer::singleShot(2500, &view, SLOT(show()));
     w.move((QApplication::desktop()->width() - w.width()) / 2,
            (QApplication::desktop()->height() - w.height()) / 2);
 

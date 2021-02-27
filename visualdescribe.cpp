@@ -83,13 +83,13 @@ visualDescribe::visualDescribe(QWidget *parent) :
     shadow_effect->setColor(Qt::gray);
     shadow_effect->setBlurRadius(8);
     ui->qwtPlot->setGraphicsEffect(shadow_effect);
-    this->setWindowTitle("Visual Display Window");
+    this->setWindowTitle("形象描述");
     ui->qwtPlot->setAutoReplot(false);
-    ui->qwtPlot->setTitle("The Change Of Temperature");
+    ui->qwtPlot->setTitle("温度变化");
     QwtPlotCanvas *canvas = new QwtPlotCanvas();//画布
     canvas->setBorderRadius( 10 );//画布四周边框角半径
     ui->qwtPlot->setCanvas( canvas );//设置绘图的画布
-    ui->qwtPlot->setAxisTitle( QwtPlot::xBottom, " Time [h:m:s]" );
+    ui->qwtPlot->setAxisTitle( QwtPlot::xBottom, " 时间 [h:m:s]" );
     QTime curTime;
     curTime = curTime.currentTime();
     curTime = curTime.addSecs(-60);
@@ -102,7 +102,7 @@ visualDescribe::visualDescribe(QWidget *parent) :
         timeData[HISTORY - 1 - i] = i;
     startTimer(1000);
 
-    ui->qwtPlot->setAxisTitle( QwtPlot::yLeft, "T [°]" );
+    ui->qwtPlot->setAxisTitle( QwtPlot::yLeft, "温度 [°]" );
     ui->qwtPlot->setAxisScale( QwtPlot::yLeft, -50, 50 );
 
     Background *bg = new Background();//给绘图填充背景

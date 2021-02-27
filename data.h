@@ -3,6 +3,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QtGlobal>
 #include <QObject>
 
 class Data : public QObject
@@ -33,11 +34,11 @@ public:
     float getavZ();
 
     void setanX(float anX);
-    float getanX();
+    Q_INVOKABLE float getanX();
     void setanY(float anY);
-    float getanY();
+    Q_INVOKABLE float getanY();
     void setanZ(float anZ);
-    float getanZ();
+    Q_INVOKABLE float getanZ();
 
     void setgunValue(float gunValue);
     float getgunValue();
