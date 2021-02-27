@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file alias="lightOn">resources/黄色.png</file>
+        <file alias="lightOff">resources/灰色.png</file>
+    </qresource>
+</RCC>
